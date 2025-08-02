@@ -1,0 +1,774 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Health Design System (HDS) - Core Variables */
+  --hds-spacing-xs: 4px;
+  --hds-spacing-sm: 8px;
+  --hds-spacing-md: 16px;
+  --hds-spacing-lg: 24px;
+  --hds-spacing-xl: 32px;
+  --hds-spacing-2xl: 48px;
+  --hds-spacing-3xl: 64px;
+  
+  --hds-radius-sm: 4px;
+  --hds-radius-md: 8px;
+  --hds-radius-lg: 12px;
+  --hds-radius-xl: 16px;
+  
+  --hds-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --hds-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --hds-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --hds-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* Healthcare Color System */
+  --foreground-rgb: 51, 51, 51; /* #333333 */
+  --background-start-rgb: 245, 245, 245; /* #F5F5F5 */
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 15, 23, 42; /* slate-900 */
+    --background-end-rgb: 2, 6, 23; /* slate-950 */
+  }
+}
+
+@layer base {
+  :root {
+    /* Health Design System (HDS) - Light Theme */
+    --background: 0 0% 98%; /* #FAFAFA - HDS light background */
+    --foreground: 222 84% 4.9%; /* #0F172A - HDS dark text */
+    --card: 0 0% 100%; /* #FFFFFF - Clean white cards */
+    --card-foreground: 222 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 84% 4.9%;
+    
+    /* HDS Healthcare Primary Colors */
+    --primary: 217 91% 60%; /* #3B82F6 - Healthcare blue */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 20.2% 65.1%; /* #94A3B8 - Soft slate */
+    --secondary-foreground: 222 84% 4.9%;
+    --muted: 210 40% 96%; /* #F1F5F9 - Light slate */
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 142 76% 36%; /* #16A34A - Healthcare green */
+    --accent-foreground: 0 0% 100%;
+    
+    /* HDS Status Colors */
+    --destructive: 0 84% 60%; /* #EF4444 - Error red */
+    --destructive-foreground: 0 0% 100%;
+    --success: 142 71% 45%; /* #22C55E - Success green */
+    --success-foreground: 0 0% 100%;
+    --warning: 43 96% 56%; /* #EAB308 - Warning amber */
+    --warning-foreground: 222 84% 4.9%;
+    --info: 217 91% 60%; /* #3B82F6 - Info blue */
+    --info-foreground: 0 0% 100%;
+    
+    /* HDS Surface Colors */
+    --border: 214.3 31.8% 91.4%; /* #E2E8F0 - Light border */
+    --input: 214.3 31.8% 91.4%;
+    --ring: 217 91% 60%;
+    
+    /* HDS Chart Colors for Healthcare Analytics */
+    --chart-1: 217 91% 60%; /* Primary blue */
+    --chart-2: 142 71% 45%; /* Success green */
+    --chart-3: 43 96% 56%; /* Warning amber */
+    --chart-4: 262 83% 58%; /* Purple accent */
+    --chart-5: 339 82% 52%; /* Pink accent */
+    
+    --radius: var(--hds-radius-md);
+  }
+  
+  .dark {
+    /* Health Design System (HDS) - Dark Theme */
+    --background: 222 84% 4.9%; /* #0F172A - HDS dark background */
+    --foreground: 210 40% 98%; /* #F8FAFC - Light text */
+    --card: 222 84% 5.9%; /* #1E293B - Dark cards */
+    --card-foreground: 210 40% 98%;
+    --popover: 222 84% 5.9%;
+    --popover-foreground: 210 40% 98%;
+    
+    /* HDS Healthcare Primary Colors - Dark Mode */
+    --primary: 217 91% 70%; /* #60A5FA - Lighter blue for contrast */
+    --primary-foreground: 222 84% 4.9%;
+    --secondary: 217 19% 27%; /* #334155 - Dark slate */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 19% 27%; /* #334155 - Muted background */
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 142 71% 55%; /* #4ADE80 - Brighter green for dark mode */
+    --accent-foreground: 222 84% 4.9%;
+    
+    /* HDS Status Colors - Dark Mode */
+    --destructive: 0 84% 65%; /* #F87171 - Softer red */
+    --destructive-foreground: 210 40% 98%;
+    --success: 142 71% 55%; /* #4ADE80 - Bright green */
+    --success-foreground: 222 84% 4.9%;
+    --warning: 43 96% 66%; /* #FDE047 - Bright yellow */
+    --warning-foreground: 222 84% 4.9%;
+    --info: 217 91% 70%; /* #60A5FA - Info blue */
+    --info-foreground: 222 84% 4.9%;
+    
+    /* HDS Surface Colors - Dark Mode */
+    --border: 217 19% 27%; /* #334155 - Dark border */
+    --input: 217 19% 27%;
+    --ring: 217 91% 70%;
+    
+    /* HDS Chart Colors - Dark Mode */
+    --chart-1: 217 91% 70%; /* Primary blue */
+    --chart-2: 142 71% 55%; /* Success green */
+    --chart-3: 43 96% 66%; /* Warning amber */
+    --chart-4: 262 83% 68%; /* Purple accent */
+    --chart-5: 339 82% 62%; /* Pink accent */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* HDS Typography Scale */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+  
+  h1 {
+    @apply text-3xl md:text-4xl; /* 30px/48px - HDS Display */
+    font-weight: 700;
+  }
+  
+  h2 {
+    @apply text-2xl md:text-3xl; /* 24px/30px - HDS Heading */
+    font-weight: 600;
+  }
+  
+  h3 {
+    @apply text-xl md:text-2xl; /* 20px/24px - HDS Subheading */
+    font-weight: 600;
+  }
+  
+  h4 {
+    @apply text-lg md:text-xl; /* 18px/20px - HDS Section */
+    font-weight: 500;
+  }
+  
+  h5 {
+    @apply text-base md:text-lg; /* 16px/18px - HDS Label */
+    font-weight: 500;
+  }
+  
+  h6 {
+    @apply text-sm md:text-base; /* 14px/16px - HDS Caption */
+    font-weight: 500;
+  }
+  
+  p {
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  
+  /* HDS Link Styles */
+  a {
+    color: hsl(var(--primary));
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  a:hover {
+    color: hsl(var(--primary) / 0.8);
+    text-decoration: underline;
+  }
+  
+  a:focus {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: var(--hds-radius-sm);
+  }
+  
+  /* HDS Focus Styles for Accessibility */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: var(--hds-radius-sm);
+  }
+}
+
+@layer components {
+  /* HDS Healthcare Status Badges */
+  .hds-badge-completed {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-sm font-medium;
+    background-color: hsl(var(--success) / 0.1);
+    color: hsl(var(--success));
+    border: 1px solid hsl(var(--success) / 0.3);
+  }
+  
+  .hds-badge-overdue {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-sm font-medium;
+    background-color: hsl(var(--destructive) / 0.1);
+    color: hsl(var(--destructive));
+    border: 1px solid hsl(var(--destructive) / 0.3);
+  }
+  
+  .hds-badge-in-progress {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-sm font-medium;
+    background-color: hsl(var(--info) / 0.1);
+    color: hsl(var(--info));
+    border: 1px solid hsl(var(--info) / 0.3);
+  }
+  
+  .hds-badge-pending {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-sm font-medium;
+    background-color: hsl(var(--warning) / 0.1);
+    color: hsl(var(--warning));
+    border: 1px solid hsl(var(--warning) / 0.3);
+  }
+  
+  /* HDS Healthcare Cards */
+  .hds-card {
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    border-radius: var(--hds-radius-lg);
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--hds-shadow-sm);
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .hds-card:hover {
+    box-shadow: var(--hds-shadow-md);
+    transform: translateY(-1px);
+  }
+  
+  .hds-card-critical {
+    border-left: 4px solid hsl(var(--destructive));
+  }
+  
+  .hds-card-warning {
+    border-left: 4px solid hsl(var(--warning));
+  }
+  
+  .hds-card-success {
+    border-left: 4px solid hsl(var(--success));
+  }
+  
+  /* HDS Healthcare Buttons */
+  .hds-btn-primary {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: 1px solid hsl(var(--primary));
+    border-radius: var(--hds-radius-md);
+    padding: var(--hds-spacing-sm) var(--hds-spacing-md);
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .hds-btn-primary:hover {
+    background-color: hsl(var(--primary) / 0.9);
+    transform: translateY(-1px);
+    box-shadow: var(--hds-shadow-md);
+  }
+  
+  .hds-btn-primary:focus {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+  
+  .hds-btn-secondary {
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--hds-radius-md);
+    padding: var(--hds-spacing-sm) var(--hds-spacing-md);
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .hds-btn-secondary:hover {
+    background-color: hsl(var(--muted));
+    border-color: hsl(var(--border));
+  }
+  
+  .hds-btn-success {
+    background-color: hsl(var(--success));
+    color: hsl(var(--success-foreground));
+    border: 1px solid hsl(var(--success));
+    border-radius: var(--hds-radius-md);
+    padding: var(--hds-spacing-sm) var(--hds-spacing-md);
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .hds-btn-success:hover {
+    background-color: hsl(var(--success) / 0.9);
+    transform: translateY(-1px);
+    box-shadow: var(--hds-shadow-md);
+  }
+  
+  .hds-btn-warning {
+    background-color: hsl(var(--warning));
+    color: hsl(var(--warning-foreground));
+    border: 1px solid hsl(var(--warning));
+    border-radius: var(--hds-radius-md);
+    padding: var(--hds-spacing-sm) var(--hds-spacing-md);
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .hds-btn-warning:hover {
+    background-color: hsl(var(--warning) / 0.9);
+    transform: translateY(-1px);
+    box-shadow: var(--hds-shadow-md);
+  }
+  
+  .hds-btn-destructive {
+    background-color: hsl(var(--destructive));
+    color: hsl(var(--destructive-foreground));
+    border: 1px solid hsl(var(--destructive));
+    border-radius: var(--hds-radius-md);
+    padding: var(--hds-spacing-sm) var(--hds-spacing-md);
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .hds-btn-destructive:hover {
+    background-color: hsl(var(--destructive) / 0.9);
+    transform: translateY(-1px);
+    box-shadow: var(--hds-shadow-md);
+  }
+  
+  /* HDS Healthcare Forms */
+  .hds-input {
+    background-color: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--hds-radius-md);
+    padding: var(--hds-spacing-sm) var(--hds-spacing-md);
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+  }
+  
+  .hds-input:focus {
+    outline: none;
+    border-color: hsl(var(--ring));
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.1);
+  }
+  
+  .hds-input:invalid {
+    border-color: hsl(var(--destructive));
+  }
+  
+  .hds-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+    margin-bottom: var(--hds-spacing-xs);
+    display: block;
+  }
+  
+  /* HDS Healthcare Navigation */
+  .hds-nav-item {
+    padding: var(--hds-spacing-sm) var(--hds-spacing-md);
+    border-radius: var(--hds-radius-md);
+    transition: all 0.2s ease-in-out;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .hds-nav-item:hover {
+    background-color: hsl(var(--muted));
+    color: hsl(var(--primary));
+  }
+  
+  .hds-nav-item.active {
+    background-color: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+    font-weight: 600;
+  }
+  
+  /* HDS Healthcare Tables */
+  .hds-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: hsl(var(--card));
+    border-radius: var(--hds-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--hds-shadow-sm);
+  }
+  
+  .hds-table th {
+    background-color: hsl(var(--muted));
+    padding: var(--hds-spacing-md);
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: hsl(var(--foreground));
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  
+  .hds-table td {
+    padding: var(--hds-spacing-md);
+    border-bottom: 1px solid hsl(var(--border));
+    font-size: 14px;
+    color: hsl(var(--foreground));
+  }
+  
+  .hds-table tr:hover {
+    background-color: hsl(var(--muted) / 0.5);
+  }
+  
+  .hds-table tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+/* HDS Healthcare-specific utilities */
+@layer utilities {
+  /* Healthcare Compliance Score Indicators */
+  .hds-compliance-score-high {
+    color: hsl(var(--success));
+    font-weight: 600;
+  }
+  
+  .hds-compliance-score-medium {
+    color: hsl(var(--warning));
+    font-weight: 600;
+  }
+  
+  .hds-compliance-score-low {
+    color: hsl(var(--destructive));
+    font-weight: 600;
+  }
+  
+  /* Healthcare Priority Indicators */
+  .hds-priority-critical {
+    background: linear-gradient(135deg, hsl(var(--destructive)) 0%, hsl(var(--destructive) / 0.8) 100%);
+    color: hsl(var(--destructive-foreground));
+    padding: var(--hds-spacing-xs) var(--hds-spacing-sm);
+    border-radius: var(--hds-radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .hds-priority-high {
+    background: linear-gradient(135deg, hsl(var(--warning)) 0%, hsl(var(--warning) / 0.8) 100%);
+    color: hsl(var(--warning-foreground));
+    padding: var(--hds-spacing-xs) var(--hds-spacing-sm);
+    border-radius: var(--hds-radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .hds-priority-medium {
+    background: linear-gradient(135deg, hsl(var(--info)) 0%, hsl(var(--info) / 0.8) 100%);
+    color: hsl(var(--info-foreground));
+    padding: var(--hds-spacing-xs) var(--hds-spacing-sm);
+    border-radius: var(--hds-radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .hds-priority-low {
+    background: linear-gradient(135deg, hsl(var(--success)) 0%, hsl(var(--success) / 0.8) 100%);
+    color: hsl(var(--success-foreground));
+    padding: var(--hds-spacing-xs) var(--hds-spacing-sm);
+    border-radius: var(--hds-radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Healthcare Gradient Backgrounds */
+  .hds-gradient-healthcare {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  }
+  
+  .hds-gradient-success {
+    background: linear-gradient(135deg, hsl(var(--success)) 0%, hsl(var(--success) / 0.8) 100%);
+  }
+  
+  .hds-gradient-warning {
+    background: linear-gradient(135deg, hsl(var(--warning)) 0%, hsl(var(--warning) / 0.8) 100%);
+  }
+  
+  .hds-gradient-critical {
+    background: linear-gradient(135deg, hsl(var(--destructive)) 0%, hsl(var(--destructive) / 0.8) 100%);
+  }
+  
+  /* Healthcare Layout Utilities */
+  .hds-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--hds-spacing-md);
+  }
+  
+  .hds-grid {
+    display: grid;
+    gap: var(--hds-spacing-md);
+  }
+  
+  .hds-grid-responsive {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--hds-spacing-lg);
+  }
+  
+  /* Responsive breakpoints for dashboard */
+  @media (max-width: 768px) {
+    .hds-grid-responsive {
+      grid-template-columns: 1fr;
+      gap: var(--hds-spacing-md);
+    }
+  }
+  
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .hds-grid-responsive {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--hds-spacing-lg);
+    }
+  }
+  
+  @media (min-width: 1025px) {
+    .hds-grid-responsive {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--hds-spacing-lg);
+    }
+  }
+  
+  .hds-grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  
+  .hds-grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  
+  .hds-grid-4 {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  /* Ensure cards fill the grid properly */
+  .hds-card-metric,
+  .hds-card-action {
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hds-card-metric .card-content,
+  .hds-card-action .card-content {
+    flex: 1;
+  }
+
+  /* Override default card padding for metric cards */
+  .hds-card-metric > [class*="space-y-1.5"] {
+    padding: var(--hds-spacing-md) var(--hds-spacing-lg) var(--hds-spacing-sm) var(--hds-spacing-lg);
+  }
+
+  .hds-card-metric > [class*="pt-0"] {
+    padding: 0 var(--hds-spacing-lg) var(--hds-spacing-md) var(--hds-spacing-lg);
+  }
+  
+  /* Healthcare Spacing Utilities */
+  .hds-space-xs { margin: var(--hds-spacing-xs); }
+  .hds-space-sm { margin: var(--hds-spacing-sm); }
+  .hds-space-md { margin: var(--hds-spacing-md); }
+  .hds-space-lg { margin: var(--hds-spacing-lg); }
+  .hds-space-xl { margin: var(--hds-spacing-xl); }
+  
+  .hds-space-y-xs > * + * { margin-top: var(--hds-spacing-xs); }
+  .hds-space-y-sm > * + * { margin-top: var(--hds-spacing-sm); }
+  .hds-space-y-md > * + * { margin-top: var(--hds-spacing-md); }
+  .hds-space-y-lg > * + * { margin-top: var(--hds-spacing-lg); }
+  .hds-space-y-xl > * + * { margin-top: var(--hds-spacing-xl); }
+  
+  /* Healthcare Accessibility Utilities */
+  .hds-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  .hds-focus-ring {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: var(--hds-radius-sm);
+  }
+  
+  .hds-high-contrast {
+    filter: contrast(1.2);
+  }
+  
+  /* Healthcare Animation Utilities */
+  .hds-animate-fade-in {
+    animation: hds-fade-in 0.3s ease-in-out;
+  }
+  
+  .hds-animate-slide-up {
+    animation: hds-slide-up 0.3s ease-out;
+  }
+  
+  .hds-animate-pulse {
+    animation: hds-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  /* Healthcare Status Indicators */
+  .hds-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: var(--hds-spacing-xs);
+  }
+  
+  .hds-status-dot-success {
+    background-color: hsl(var(--success));
+  }
+  
+  .hds-status-dot-warning {
+    background-color: hsl(var(--warning));
+  }
+  
+  .hds-status-dot-error {
+    background-color: hsl(var(--destructive));
+  }
+  
+  .hds-status-dot-info {
+    background-color: hsl(var(--info));
+  }
+}
+
+/* HDS Healthcare Animations */
+@keyframes hds-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hds-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hds-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* HDS Responsive Breakpoints */
+@media (max-width: 320px) {
+  .hds-container {
+    padding: 0 var(--hds-spacing-sm);
+  }
+}
+
+@media (min-width: 768px) {
+  .hds-grid-md-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .hds-grid-md-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .hds-grid-md-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hds-grid-lg-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .hds-grid-lg-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .hds-grid-lg-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .hds-grid-lg-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* HDS Dark Mode Overrides */
+@media (prefers-color-scheme: dark) {
+  .hds-high-contrast {
+    filter: contrast(1.3) brightness(0.9);
+  }
+}
+
+/* HDS Print Styles for Healthcare Reports */
+@media print {
+  .hds-no-print {
+    display: none !important;
+  }
+  
+  .hds-card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .hds-btn-primary,
+  .hds-btn-secondary,
+  .hds-btn-success,
+  .hds-btn-warning,
+  .hds-btn-destructive {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #333 !important;
+  }
+}

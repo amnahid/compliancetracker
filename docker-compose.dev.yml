@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # MongoDB Database for Development
+  mongodb-dev:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: compliance-tracker-dev
+    volumes:
+      - mongodb_dev_data:/data/db
+    networks:
+      - compliance-dev-network
+
+  # Redis for session storage (optional)
+  redis-dev:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - compliance-dev-network
+
+volumes:
+  mongodb_dev_data:
+  redis_dev_data:
+
+networks:
+  compliance-dev-network:
+    driver: bridge

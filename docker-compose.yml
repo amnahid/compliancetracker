@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: compliance-tracker
+    volumes:
+      - mongodb_data:/data/db
+      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - compliance-network
+
+  # ComplianceTracker Application
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017/compliance-tracker?authSource=admin
+      - NEXTAUTH_URL=http://localhost:3000
+    depends_on:
+      - mongodb
+    networks:
+      - compliance-network
+    volumes:
+      - ./uploads:/app/uploads
+
+volumes:
+  mongodb_data:
+
+networks:
+  compliance-network:
+    driver: bridge
