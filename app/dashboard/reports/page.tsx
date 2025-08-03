@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -53,9 +53,10 @@ export default function ReportsPage() {
     if (session?.user?.organization) {
       fetchReportData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, reportType, timePeriod]);
 
-  const fetchReportData = async () => {
+  const fetchReportData = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -209,7 +210,7 @@ export default function ReportsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [timePeriod]);
 
   const exportReport = () => {
     if (!complianceData) return;

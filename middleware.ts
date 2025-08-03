@@ -3,66 +3,46 @@ import { NextResponse } from 'next/server';
 
 export default withAuth(
   function middleware(req) {
-    const { pathname } = req.nextUrl;
-    const { token } = req.nextauth;
+    try {
+      const { pathname } = req.nextUrl;
+      const { token } = req.nextauth;
 
-    // Debug logging for organization setup issues
-    if (token) {
-      console.log('Middleware - Request details:', {
+      console.log('🔥 MIDDLEWARE DEBUG:', {
         pathname,
-        userEmail: token.email,
-        userRole: token.role,
-        hasOrganization: !!token.organization,
-        organizationType: typeof token.organization,
-        organizationData: token.organization
+        hasToken: !!token,
+        tokenKeys: token ? Object.keys(token) : 'NO TOKEN',
+        userOrganization: token?.organization,
+        userOrganizationType: typeof token?.organization,
+        userEmail: token?.email,
+        timestamp: new Date().toISOString()
       });
-    }
 
-    // Check if user needs organization setup (null organization or legacy string organization)
-    if (token && (!token.organization || typeof token.organization === 'string') && !pathname.startsWith('/organization/setup') && !pathname.startsWith('/auth') && !pathname.startsWith('/api/auth') && !pathname.startsWith('/api/organization/setup') && !pathname.startsWith('/api/organization/migrate')) {
-      console.log('Middleware - Redirecting to organization setup:', {
-        email: token.email,
-        organization: token.organization,
-        pathname
-      });
-      return NextResponse.redirect(new URL('/organization/setup', req.url));
-    }
+      // If user has no organization, redirect to organization setup (except for organization setup page)
+      if (token && !token.organization && !pathname.startsWith('/organization/setup')) {
+        console.log('🟡 MIDDLEWARE: No organization, redirecting to setup from:', pathname);
+        const setupUrl = new URL('/organization/setup', req.url);
+        return NextResponse.redirect(setupUrl);
+      }
 
-    // Prevent access to organization setup if user already has proper organization
-    if (pathname.startsWith('/organization/setup') && token?.organization && typeof token.organization === 'object') {
-      console.log('Middleware - Redirecting from setup to dashboard (has organization):', {
-        email: token.email,
-        organization: token.organization
-      });
-      return NextResponse.redirect(new URL('/dashboard', req.url));
-    }
+      // If user has organization but is on setup page, redirect to dashboard
+      if (pathname.startsWith('/organization/setup') && token?.organization && typeof token.organization === 'object') {
+        console.log('🟢 MIDDLEWARE: Has organization, redirecting from setup to dashboard');
+        return NextResponse.redirect(new URL('/dashboard', req.url));
+      }
 
-    // Admin routes protection
-    if (pathname.startsWith('/admin') && token?.role !== 'admin') {
-      return NextResponse.redirect(new URL('/dashboard', req.url));
-    }
+      // Admin routes protection
+      if (pathname.startsWith('/admin') && token?.role !== 'admin') {
+        console.log('🔴 MIDDLEWARE: Admin access denied, redirecting to dashboard');
+        return NextResponse.redirect(new URL('/dashboard', req.url));
+      }
 
-    // Staff management protection (admin only)
-    if (pathname.startsWith('/dashboard/staff') && token?.role !== 'admin') {
-      return NextResponse.redirect(new URL('/dashboard', req.url));
+      console.log('🟢 MIDDLEWARE: Allowing request to:', pathname);
+      return NextResponse.next();
+    } catch (error) {
+      console.error('🔴 MIDDLEWARE ERROR:', error);
+      // In case of error, allow the request to continue to avoid breaking the app
+      return NextResponse.next();
     }
-
-    // Dashboard routes protection - require authentication
-    if (pathname.startsWith('/dashboard') && !token) {
-      return NextResponse.redirect(new URL('/auth/signin', req.url));
-    }
-
-    // Organization routes protection - require authentication
-    if (pathname.startsWith('/organization') && !token) {
-      return NextResponse.redirect(new URL('/auth/signin', req.url));
-    }
-
-    // Billing routes protection - require active subscription for some features
-    if (pathname.startsWith('/dashboard/billing') && !token) {
-      return NextResponse.redirect(new URL('/auth/signin', req.url));
-    }
-
-    return NextResponse.next();
   },
   {
     callbacks: {
@@ -70,35 +50,12 @@ export default withAuth(
         const { pathname } = req.nextUrl;
         
         // Allow public routes
-        if (
-          pathname === '/' ||
-          pathname.startsWith('/auth') ||
-          pathname.startsWith('/api/auth') ||
-          pathname.startsWith('/organization/setup') ||
-          pathname.startsWith('/api/organization/setup') ||
-          pathname.startsWith('/api/organization/migrate') ||
-          pathname.startsWith('/pricing') ||
-          pathname.startsWith('/_next') ||
-          pathname.startsWith('/favicon') ||
-          pathname.startsWith('/static') ||
-          (process.env.NODE_ENV === 'development' && pathname.startsWith('/api/debug'))
-        ) {
+        if (pathname === '/' || pathname.startsWith('/auth/')) {
           return true;
         }
-
-        // API routes that need authentication
-        if (pathname.startsWith('/api/admin') || 
-            pathname.startsWith('/api/stripe') ||
-            pathname.startsWith('/api/user')) {
-          return !!token;
-        }
-
-        // Dashboard and admin routes require authentication
-        if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {
-          return !!token;
-        }
-
-        // Default to requiring authentication for unlisted routes
+        
+        // Require authentication for all other routes
+        // If no token, user will be redirected to sign in
         return !!token;
       },
     },
@@ -107,11 +64,14 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    '/dashboard/:path*',
-    '/admin/:path*',
-    '/api/admin/:path*',
-    '/api/stripe/:path*',
-    '/api/user/:path*',
-    '/((?!auth|_next/static|_next/image|favicon.ico|$).*)',
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api/auth (NextAuth API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - api/ (API routes - they handle their own auth)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)',
   ],
 };

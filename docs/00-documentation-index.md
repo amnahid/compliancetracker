@@ -13,6 +13,7 @@ This directory contains comprehensive documentation for the Healthcare Complianc
 ### 🔐 Core Systems (Technical Deep-Dive)
 
 - **[07-authentication.md](./07-authentication.md)** - Complete authentication system guide
+- **[google-oauth-setup.md](./google-oauth-setup.md)** - Step-by-step Google OAuth configuration
 - **[08-user-management.md](./08-user-management.md)** - User roles, permissions, and management
 - **[09-payment-integration.md](./09-payment-integration.md)** - Stripe payment processing and subscriptions
 

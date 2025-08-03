@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import connectDB from './mongodb';
 import User from './models/User';
 import Organization from './models/Organization';
+import { ensureModelsRegistered } from './model-registry';
 
 // Debug environment variables
 // Remove debug logging for security
@@ -41,6 +42,8 @@ export const authOptions: NextAuthOptions = {
           }
 
           await connectDB();
+          // Ensure all models are registered
+          await ensureModelsRegistered();
 
           const user = await User.findOne({ email: credentials.email }).select('+password').populate('organization');
 
@@ -83,6 +86,8 @@ export const authOptions: NextAuthOptions = {
         try {
           await connectDB();
           const UserModel = await import('./models/User').then(m => m.default);
+          // Ensure all models are registered
+          await ensureModelsRegistered();
           const dbUser = await UserModel.findOne({ email: user.email }).populate('organization');
           if (dbUser && dbUser.organization && typeof dbUser.organization === 'object') {
             token.organization = dbUser.organization;
@@ -109,6 +114,8 @@ export const authOptions: NextAuthOptions = {
         try {
           await connectDB();
           const UserModel = await import('./models/User').then(m => m.default);
+          // Ensure all models are registered
+          await ensureModelsRegistered();
           const dbUser = await UserModel.findOne({ email: token.email }).populate('organization');
           if (dbUser) {
             token.role = dbUser.role;
@@ -134,6 +141,8 @@ export const authOptions: NextAuthOptions = {
         try {
           await connectDB();
           const UserModel = await import('./models/User').then(m => m.default);
+          // Ensure all models are registered
+          await ensureModelsRegistered();
           const dbUser = await UserModel.findOne({ email: token.email }).populate('organization');
           if (dbUser && dbUser.organization && typeof dbUser.organization === 'object') {
             token.organization = dbUser.organization;
@@ -161,6 +170,8 @@ export const authOptions: NextAuthOptions = {
             try {
               await connectDB();
               const UserModel = await import('./models/User').then(m => m.default);
+              // Ensure all models are registered
+              await ensureModelsRegistered();
               const dbUser = await UserModel.findOne({ email: session.user.email }).populate('organization');
               if (dbUser) {
                 session.user.role = dbUser.role;
@@ -252,4 +263,8 @@ export const authOptions: NextAuthOptions = {
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
+  // Ensure proper URL configuration
+  ...(process.env.NEXTAUTH_URL && {
+    url: process.env.NEXTAUTH_URL
+  }),
 };

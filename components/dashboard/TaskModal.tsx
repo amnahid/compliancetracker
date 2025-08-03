@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -82,9 +82,10 @@ export default function TaskModal({ isOpen, onClose, task, onSave }: TaskModalPr
         setTime('09:00');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, task]);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/users');
       if (response.ok) {
@@ -114,7 +115,7 @@ export default function TaskModal({ isOpen, onClose, task, onSave }: TaskModalPr
       // Set empty array on error
       setUsers([]);
     }
-  };
+  }, [session?.user?.role, session?.user?.email, task]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

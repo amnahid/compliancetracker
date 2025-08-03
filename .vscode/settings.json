@@ -1,0 +1,177 @@
+{
+  // AGGRESSIVE PERFORMANCE SETTINGS FOR LARGE PROJECT
+  
+  // Completely exclude large directories from VS Code file watcher
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.next/**": true,
+    "**/coverage/**": true,
+    "**/.swc/**": true,
+    "**/out/**": true,
+    "**/.vercel/**": true,
+    "**/.bolt/**": true,
+    "**/package-lock.json": true,
+    "**/__tests__/**": true,
+    "**/docs/**": true
+  },
+  
+  // Exclude from file search completely
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/coverage": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.swc": true,
+    "**/out": true,
+    "**/.vercel": true,
+    "**/package-lock.json": true,
+    "**/*.tsbuildinfo": true,
+    "**/.git": true,
+    "**/.bolt": true,
+    "**/docs/*.md": true,
+    "**/*_FIX*.md": true,
+    "**/*_COMPLETE*.md": true,
+    "**/*_REPORT*.md": true,
+    "**/*_SUMMARY*.md": true,
+    "**/*_CHECKLIST*.md": true,
+    "**/*_GUIDE*.md": true,
+    "**/*_STATUS*.md": true,
+    "**/*_AUDIT*.md": true,
+    "**/*_VALIDATION*.md": true,
+    "**/*_DOCUMENTATION*.md": true,
+    "**/*_TEMPLATE*.md": true,
+    "**/*_DEBUG*.md": true,
+    "**/*_SETUP*.md": true,
+    "**/*_IMPROVEMENTS*.md": true,
+    "**/*_UPDATE*.md": true,
+    "**/*_FIXES*.md": true
+  },
+  
+  // Hide from file explorer (but keep node_modules visible when needed)
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": false,
+    "**/.next": true,
+    "**/.swc": true,
+    "**/coverage": true,
+    "**/*.tsbuildinfo": true,
+    "**/.bolt": true,
+    "**/package-lock.json": true,
+    "**/*_FIX*.md": true,
+    "**/*_COMPLETE*.md": true,
+    "**/*_REPORT*.md": true,
+    "**/*_SUMMARY*.md": true,
+    "**/*_CHECKLIST*.md": true,
+    "**/*_GUIDE*.md": true,
+    "**/*_STATUS*.md": true,
+    "**/*_AUDIT*.md": true,
+    "**/*_VALIDATION*.md": true,
+    "**/*_DOCUMENTATION*.md": true,
+    "**/*_TEMPLATE*.md": true,
+    "**/*_DEBUG*.md": true,
+    "**/*_SETUP*.md": true,
+    "**/*_IMPROVEMENTS*.md": true,
+    "**/*_UPDATE*.md": true,
+    "**/*_FIXES*.md": true,
+    "**/ending.txt": true
+  },
+  
+  // AGGRESSIVE TypeScript performance optimizations
+  "typescript.preferences.includePackageJsonAutoImports": "off",
+  "typescript.suggest.autoImports": false,
+  "typescript.disableAutomaticTypeAcquisition": true,
+  "typescript.tsc.autoDetect": "off",
+  "typescript.tsserver.maxTsServerMemory": 8192,
+  "typescript.tsserver.useSeparateSyntaxServer": true,
+  "typescript.tsserver.enableTracing": false,
+  "typescript.tsserver.log": "off",
+  "typescript.validate.enable": true,
+  "typescript.format.enable": false,
+  "typescript.suggestionActions.enabled": false,
+  "typescript.implementationsCodeLens.enabled": false,
+  "typescript.referencesCodeLens.enabled": false,
+  "typescript.suggest.completeFunctionCalls": false,
+  
+  // Disable heavy language features
+  "editor.semanticHighlighting.enabled": false,
+  "editor.minimap.enabled": false,
+  "editor.wordWrap": "off",
+  "editor.renderWhitespace": "none",
+  "editor.renderControlCharacters": false,
+  "editor.renderIndentGuides": false,
+  "editor.codeLens": false,
+  "editor.folding": false,
+  "editor.foldingHighlight": false,
+  "editor.showFoldingControls": "never",
+  "editor.occurrencesHighlight": "off",
+  "editor.selectionHighlight": false,
+  "editor.hover.enabled": false,
+  "editor.links": false,
+  "editor.colorDecorators": false,
+  
+  // Disable automatic features
+  "extensions.autoUpdate": false,
+  "extensions.autoCheckUpdates": false,
+  "workbench.settings.enableNaturalLanguageSearch": false,
+  "workbench.enableExperiments": false,
+  "workbench.settings.useSplitJSON": true,
+  
+  // ESLint performance - DISABLED for performance
+  "eslint.enable": false,
+  
+  // File associations for better performance
+  "files.associations": {
+    "*.md": "markdown",
+    "*.env*": "properties"
+  },
+  
+  // Disable automatic updates of imports
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  
+  // Limit file monitoring to essential files only
+  "files.watcherInclude": [
+    "app/**/*.{ts,tsx,js,jsx}",
+    "components/**/*.{ts,tsx,js,jsx}",
+    "lib/**/*.{ts,tsx,js,jsx}",
+    "hooks/**/*.{ts,tsx,js,jsx}",
+    "types/**/*.{ts,tsx,js,jsx}",
+    "*.{ts,tsx,js,jsx,json}",
+    "package.json",
+    "tsconfig.json",
+    "next.config.js"
+  ],
+  
+  // Disable telemetry and crash reporting
+  "telemetry.telemetryLevel": "off",
+  
+  // Reduce git operations
+  "git.enabled": true,
+  "git.autorefresh": false,
+  "git.decorations.enabled": false,
+  "git.autoStash": false,
+  
+  // Performance tweaks
+  "files.hotExit": "off",
+  "files.autoSave": "off",
+  "editor.quickSuggestions": {
+    "other": false,
+    "comments": false,
+    "strings": false
+  },
+  "editor.suggestOnTriggerCharacters": false,
+  "editor.parameterHints.enabled": false,
+  "editor.wordBasedSuggestions": "off",
+  "editor.suggest.localityBonus": false,
+  "editor.suggest.shareSuggestSelections": false,
+  
+  // Disable heavy formatters
+  "editor.formatOnSave": false,
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false
+}

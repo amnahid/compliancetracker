@@ -40,7 +40,6 @@ const OrganizationSchema = new mongoose.Schema<IOrganization>({
   slug: {
     type: String,
     required: true,
-    unique: true,
     lowercase: true,
     trim: true,
     match: /^[a-z0-9-]+$/,
@@ -49,7 +48,6 @@ const OrganizationSchema = new mongoose.Schema<IOrganization>({
     type: String,
     trim: true,
     lowercase: true,
-    sparse: true, // Allow null but enforce uniqueness when present
   },
   description: {
     type: String,

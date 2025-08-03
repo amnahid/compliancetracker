@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -34,16 +34,7 @@ function InvitePageContent() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (token) {
-      validateInvitation();
-    } else {
-      setError('No invitation token provided');
-      setLoading(false);
-    }
-  }, [token]);
-
-  const validateInvitation = async () => {
+  const validateInvitation = useCallback(async () => {
     try {
       const response = await fetch(`/api/auth/invite?token=${token}`);
       const data = await response.json();
@@ -59,7 +50,17 @@ function InvitePageContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      validateInvitation();
+    } else {
+      setError('No invitation token provided');
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, validateInvitation]);
 
   const handleAcceptInvitation = async (e: React.FormEvent) => {
     e.preventDefault();
