@@ -4,10 +4,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
-import connectDB from './mongodb';
-import User from './models/User';
-import Organization from './models/Organization';
-import { ensureModelsRegistered } from './model-registry';
+import { connectDB, ensureModelsRegistered, getModel } from './model-registry';
 
 // Debug environment variables
 // Remove debug logging for security
@@ -43,8 +40,9 @@ export const authOptions: NextAuthOptions = {
 
           await connectDB();
           // Ensure all models are registered
-          await ensureModelsRegistered();
+          ensureModelsRegistered();
 
+          const User = getModel('User');
           const user = await User.findOne({ email: credentials.email }).select('+password').populate('organization');
 
           if (!user || !user.password) {
@@ -85,10 +83,10 @@ export const authOptions: NextAuthOptions = {
         // Always fetch fresh organization data from database to ensure populated object
         try {
           await connectDB();
-          const UserModel = await import('./models/User').then(m => m.default);
-          // Ensure all models are registered
-          await ensureModelsRegistered();
-          const dbUser = await UserModel.findOne({ email: user.email }).populate('organization');
+          ensureModelsRegistered();
+          
+          const User = getModel('User');
+          const dbUser = await User.findOne({ email: user.email }).populate('organization');
           if (dbUser && dbUser.organization && typeof dbUser.organization === 'object') {
             token.organization = dbUser.organization;
             console.log('JWT Callback - Fresh organization data for signin:', { 
@@ -169,10 +167,10 @@ export const authOptions: NextAuthOptions = {
           if ((!token.role || !token.organization) && session.user?.email) {
             try {
               await connectDB();
-              const UserModel = await import('./models/User').then(m => m.default);
-              // Ensure all models are registered
-              await ensureModelsRegistered();
-              const dbUser = await UserModel.findOne({ email: session.user.email }).populate('organization');
+              ensureModelsRegistered();
+              
+              const User = getModel('User');
+              const dbUser = await User.findOne({ email: session.user.email }).populate('organization');
               if (dbUser) {
                 session.user.role = dbUser.role;
                 // Handle both ObjectId and legacy string organizations  

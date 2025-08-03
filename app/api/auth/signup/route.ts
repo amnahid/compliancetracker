@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import connectDB from '@/lib/mongodb';
-import User from '@/lib/models/User';
-import Organization from '@/lib/models/Organization';
-import Invitation from '@/lib/models/Invitation';
+import { connectDB, ensureModelsRegistered, getModel } from '@/lib/model-registry';
 import { sendWelcomeEmail } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
@@ -18,7 +15,9 @@ export async function POST(request: NextRequest) {
     // If invitation token is provided, validate and use invitation data
     if (invitationToken) {
       await connectDB();
+      ensureModelsRegistered();
       
+      const Invitation = getModel('Invitation');
       invitation = await Invitation.findOne({
         token: invitationToken,
         status: 'pending'
@@ -88,6 +87,10 @@ export async function POST(request: NextRequest) {
     }
 
     await connectDB();
+    ensureModelsRegistered();
+
+    const User = getModel('User');
+    const Organization = getModel('Organization');
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });

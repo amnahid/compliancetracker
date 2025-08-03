@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-import User from '@/lib/models/User';
-import Organization from '@/lib/models/Organization';
+import { connectDB, ensureModelsRegistered, getModel } from '@/lib/model-registry';
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,6 +32,10 @@ export async function POST(request: NextRequest) {
     }
 
     await connectDB();
+    ensureModelsRegistered();
+
+    const User = getModel('User');
+    const Organization = getModel('Organization');
 
     // Get the current user
     const user = await User.findOne({ email: session.user.email });

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Task, { ITask } from '@/lib/models/Task';
-import User from '@/lib/models/User';
+import { connectDB, ensureModelsRegistered, getModel } from '@/lib/model-registry';
+import { ITask } from '@/lib/models/Task';
 import { requireAuthWithOrganization } from '@/lib/organization-utils';
 
 export async function GET(request: NextRequest) {
@@ -13,6 +12,10 @@ export async function GET(request: NextRequest) {
     }
 
     await connectDB();
+    ensureModelsRegistered();
+
+    const User = getModel('User');
+    const Task = getModel('Task');
 
     // Get current user from database to check role and get ObjectId
     const currentUser = await User.findOne({ email: authResult.user!.email });
@@ -78,6 +81,10 @@ export async function POST(request: NextRequest) {
     }
 
     await connectDB();
+    ensureModelsRegistered();
+
+    const User = getModel('User');
+    const Task = getModel('Task');
 
     // Find the current user by email to get their proper MongoDB _id
     const currentUser = await User.findOne({ email: authResult.user!.email });

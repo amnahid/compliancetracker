@@ -47,3 +47,6 @@ next-env.d.ts
 # Project organization (moved files for performance)
 /project-docs/
 /utility-scripts/
+
+
+logs*
