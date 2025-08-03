@@ -16,6 +16,14 @@ export const metadata: Metadata = {
   description: 'Streamline healthcare compliance with automated task tracking, document management, and regulatory oversight for medical practices.',
   keywords: 'healthcare compliance, HIPAA compliance, medical practice management, compliance tracking, healthcare documentation, regulatory compliance',
   authors: [{ name: 'ComplianceTracker Team' }],
+  icons: {
+    icon: [
+      {
+        url: '/favicon.svg',
+        type: 'image/svg+xml',
+      },
+    ],
+  },
   openGraph: {
     title: 'ComplianceTracker - Healthcare Compliance Management',
     description: 'Streamline healthcare compliance with automated task tracking, document management, and regulatory oversight for medical practices.',

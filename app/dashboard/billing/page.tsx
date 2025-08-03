@@ -74,6 +74,12 @@ function BillingPageContent() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Temporary billing disable until August 15, 2025
+  const BILLING_UNLOCK_DATE = new Date('2025-08-15');
+  const currentDate = new Date();
+  const isBillingDisabled = currentDate < BILLING_UNLOCK_DATE;
+  const daysUntilUnlock = Math.ceil((BILLING_UNLOCK_DATE.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+
   useEffect(() => {
     if (session?.user) {
       fetchUserData();
@@ -255,6 +261,23 @@ function BillingPageContent() {
         </p>
       </div>
 
+      {/* Temporary Billing Disable Notice */}
+      {isBillingDisabled && (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <Clock className="h-6 w-6 text-amber-600" />
+              <div>
+                <h3 className="font-semibold text-amber-900">Billing Options Temporarily Disabled</h3>
+                <p className="text-amber-700">
+                  Billing options will be unlocked on August 15, 2025 ({daysUntilUnlock} days remaining)
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Trial Status Banner */}
       {userIsOnTrial && trialDaysLeft > 0 && (
         <Card className="border-blue-200 bg-blue-50">
@@ -269,7 +292,11 @@ function BillingPageContent() {
                   </p>
                 </div>
               </div>
-              <Button onClick={handleStartSubscription} disabled={loading}>
+              <Button 
+                onClick={handleStartSubscription} 
+                disabled={loading || isBillingDisabled}
+                title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
+              >
                 Upgrade Now
               </Button>
             </div>
@@ -291,7 +318,11 @@ function BillingPageContent() {
                   </p>
                 </div>
               </div>
-              <Button onClick={handleStartSubscription} disabled={loading}>
+              <Button 
+                onClick={handleStartSubscription} 
+                disabled={loading || isBillingDisabled}
+                title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
+              >
                 Subscribe Now
               </Button>
             </div>
@@ -351,11 +382,20 @@ function BillingPageContent() {
 
           <div className="flex gap-2">
             {userData?.subscription?.status === 'active' ? (
-              <Button variant="outline" onClick={handleManageSubscription} disabled={loading}>
+              <Button 
+                variant="outline" 
+                onClick={handleManageSubscription} 
+                disabled={loading || isBillingDisabled}
+                title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
+              >
                 Manage Subscription
               </Button>
             ) : (
-              <Button onClick={handleStartSubscription} disabled={loading}>
+              <Button 
+                onClick={handleStartSubscription} 
+                disabled={loading || isBillingDisabled}
+                title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
+              >
                 {userIsOnTrial ? 'Upgrade to Paid Plan' : 'Start Subscription'}
               </Button>
             )}
@@ -381,8 +421,9 @@ function BillingPageContent() {
             </div>
             <Button 
               onClick={handleTestActivation} 
-              disabled={loading}
+              disabled={loading || isBillingDisabled}
               className="bg-orange-600 hover:bg-orange-700"
+              title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
             >
               🔧 Force Activate Subscription (Test)
             </Button>
