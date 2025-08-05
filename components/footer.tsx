@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Shield } from 'lucide-react';
+import Image from 'next/image';
 
 export function Footer() {
   return (
@@ -8,7 +8,13 @@ export function Footer() {
         <div className="grid gap-8 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center space-x-2 font-bold text-xl">
-              <Shield className="h-6 w-6 text-primary" />
+              <Image 
+                src="/logo.svg" 
+                alt="ComplianceTracker Logo" 
+                width={24} 
+                height={24} 
+                className="h-6 w-6"
+              />
               <span>ComplianceTracker</span>
             </Link>
             <p className="mt-4 text-muted-foreground max-w-md">

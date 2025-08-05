@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import User from '@/lib/models/User';
-import Invitation from '@/lib/models/Invitation';
+import { connectDB, ensureModelsRegistered, getModel } from '@/lib/model-registry';
 import crypto from 'crypto';
 import { requireAdminWithOrganization } from '@/lib/organization-utils';
+import { sendInvitationEmail } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,6 +13,10 @@ export async function POST(request: NextRequest) {
     }
 
     await connectDB();
+    ensureModelsRegistered();
+
+    const User = getModel('User');
+    const Invitation = getModel('Invitation');
 
     const body = await request.json();
     const { name, email, role } = body;
@@ -77,6 +80,26 @@ export async function POST(request: NextRequest) {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     const invitationLink = `${baseUrl}/auth/invite?token=${token}`;
 
+    // Send invitation email
+    try {
+      const organizationName = typeof authResult.organization === 'object' 
+        ? authResult.organization.name 
+        : 'Your Organization';
+      
+      await sendInvitationEmail(
+        email,
+        name,
+        organizationName,
+        role,
+        currentUser.name,
+        invitationLink,
+        invitation.expiresAt
+      );
+    } catch (emailError) {
+      console.error('Failed to send invitation email:', emailError);
+      // Continue with response even if email fails
+    }
+
     return NextResponse.json({
       success: true,
       invitation: {
@@ -109,6 +132,9 @@ export async function GET(request: NextRequest) {
     }
 
     await connectDB();
+    ensureModelsRegistered();
+
+    const Invitation = getModel('Invitation');
 
     const invitations = await Invitation.find({
       organization: authResult.organization?.id,

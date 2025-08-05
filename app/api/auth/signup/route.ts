@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { connectDB, ensureModelsRegistered, getModel } from '@/lib/model-registry';
-import { sendWelcomeEmail } from '@/lib/email';
+import { sendWelcomeEmail, sendVerificationEmail } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -187,11 +188,28 @@ export async function POST(request: NextRequest) {
       await invitation.save();
     }
 
-    // Send welcome email
+    // Send welcome email and verification email if needed
     try {
       await sendWelcomeEmail(email, name);
+      
+      // Check if organization requires email verification
+      const userOrg = existingOrganization || createdOrganization;
+      if (userOrg && userOrg.settings && userOrg.settings.requireEmailVerification) {
+        // Generate verification token
+        const verificationToken = jwt.sign(
+          { email, userId: user._id },
+          process.env.NEXTAUTH_SECRET!,
+          { expiresIn: '24h' }
+        );
+        
+        await sendVerificationEmail(email, name, verificationToken);
+      } else {
+        // If verification not required, mark as verified immediately
+        user.emailVerified = new Date();
+        await user.save();
+      }
     } catch (emailError) {
-      console.error('Failed to send welcome email:', emailError);
+      console.error('Failed to send emails:', emailError);
       // Don't fail the signup if email sending fails
     }
 

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuthWithOrganization } from '@/lib/organization-utils';
-import connectDB from '@/lib/mongodb';
-import Document from '@/lib/models/Document';
-import User from '@/lib/models/User';
+import { connectDB, ensureModelsRegistered, getModel } from '@/lib/model-registry';
+import { sendDocumentAssignmentEmail } from '@/lib/email';
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,6 +12,10 @@ export async function GET(request: NextRequest) {
     }
 
     await connectDB();
+    ensureModelsRegistered();
+
+    const User = getModel('User');
+    const DocumentModel = getModel('Document');
 
     // Find the current user to get their proper MongoDB _id
     const currentUser = await User.findOne({ 
@@ -27,7 +30,7 @@ export async function GET(request: NextRequest) {
 
     if (authResult.user?.role === 'admin') {
       // Admins can see all documents in their organization
-      documentsQuery = Document.find({ 
+      documentsQuery = DocumentModel.find({ 
         organization: authResult.organization?.id 
       });
     } else {
@@ -41,7 +44,7 @@ export async function GET(request: NextRequest) {
       // 1. Documents they uploaded themselves
       // 2. Documents where they are specifically assigned access (regardless of who uploaded)
       // 3. Public documents uploaded by admins only
-      documentsQuery = Document.find({
+      documentsQuery = DocumentModel.find({
         organization: authResult.organization?.id,
         $or: [
           // Documents uploaded by the current user
@@ -144,6 +147,10 @@ export async function POST(request: NextRequest) {
     const base64File = Buffer.from(fileBuffer).toString('base64');
 
     await connectDB();
+    ensureModelsRegistered();
+
+    const User = getModel('User');
+    const DocumentModel = getModel('Document');
 
     // Find the current user by email to get their proper MongoDB _id
     const currentUser = await User.findOne({ 
@@ -180,7 +187,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const document = new Document({
+    const document = new DocumentModel({
       name,
       type: file.type,
       category,
@@ -202,6 +209,31 @@ export async function POST(request: NextRequest) {
     // Populate the uploader and assigned users for response
     await document.populate('uploadedBy', 'name email');
     await document.populate('assignedTo', 'name email');
+
+    // Send email notifications to assigned users
+    if (visibility === 'restricted' && document.assignedTo && document.assignedTo.length > 0) {
+      try {
+        const organizationName = typeof authResult.organization === 'object' 
+          ? authResult.organization.name 
+          : 'Your Organization';
+        
+        const emailPromises = document.assignedTo.map((user: any) => 
+          sendDocumentAssignmentEmail(
+            user.email,
+            user.name,
+            document.name,
+            document.category,
+            currentUser.name,
+            organizationName
+          )
+        );
+        
+        await Promise.allSettled(emailPromises);
+      } catch (emailError) {
+        console.error('Failed to send document assignment emails:', emailError);
+        // Continue with response even if emails fail
+      }
+    }
 
     let status = 'active';
     if (document.expirationDate) {

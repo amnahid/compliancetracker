@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB, ensureModelsRegistered, getModel } from '@/lib/model-registry';
 import { ITask } from '@/lib/models/Task';
 import { requireAuthWithOrganization } from '@/lib/organization-utils';
+import { sendTaskAssignmentEmail } from '@/lib/email';
 
 export async function GET(request: NextRequest) {
   try {
@@ -129,6 +130,28 @@ export async function POST(request: NextRequest) {
 
     // Populate the assignee for response
     await task.populate('assignee', 'name email');
+
+    // Send task assignment email notification
+    try {
+      const organizationName = typeof authResult.organization === 'object' 
+        ? authResult.organization.name 
+        : 'Your Organization';
+      
+      await sendTaskAssignmentEmail(
+        task.assignee.email,
+        task.assignee.name,
+        task.title,
+        task.description,
+        task.dueDate,
+        currentUser.name,
+        organizationName
+      );
+
+      console.log(`Task assignment email sent to ${task.assignee.email}`);
+    } catch (emailError) {
+      console.error('Failed to send task assignment email:', emailError);
+      // Continue with response even if email fails
+    }
 
     const responseTask = {
       _id: task._id,

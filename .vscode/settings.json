@@ -103,7 +103,6 @@
   "editor.wordWrap": "off",
   "editor.renderWhitespace": "none",
   "editor.renderControlCharacters": false,
-  "editor.renderIndentGuides": false,
   "editor.codeLens": false,
   "editor.folding": false,
   "editor.foldingHighlight": false,
@@ -173,5 +172,6 @@
   // Disable heavy formatters
   "editor.formatOnSave": false,
   "editor.formatOnPaste": false,
-  "editor.formatOnType": false
+  "editor.formatOnType": false,
+  "editor.guides.indentation": false
 }

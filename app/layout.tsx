@@ -19,10 +19,12 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/favicon.svg',
+        url: '/logo.svg',
         type: 'image/svg+xml',
       },
     ],
+    shortcut: '/logo.svg',
+    apple: '/logo.svg',
   },
   openGraph: {
     title: 'ComplianceTracker - Healthcare Compliance Management',

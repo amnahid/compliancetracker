@@ -11,8 +11,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Shield, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export function Navigation() {
   const { data: session } = useSession();
@@ -23,7 +24,13 @@ export function Navigation() {
       <div className="hds-container">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="hds-nav-brand flex items-center space-x-3 font-bold text-xl">
-            <Shield className="h-7 w-7 text-primary" />
+            <Image 
+              src="/logo.svg" 
+              alt="ComplianceTracker Logo" 
+              width={28} 
+              height={28} 
+              className="h-7 w-7"
+            />
             <span className="hds-heading-xl">ComplianceTracker</span>
           </Link>
 

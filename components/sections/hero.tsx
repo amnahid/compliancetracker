@@ -16,9 +16,9 @@ export function Hero() {
           </div>
           
           <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
-            Stay Compliant,
+            Stay Compliant at
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              {' '}Stay Stress-Free
+              {' '}$49/month
             </span>
           </h1>
           
