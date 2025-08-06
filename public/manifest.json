@@ -1,0 +1,25 @@
+{
+  "name": "ComplianceTracker - Healthcare Compliance Management",
+  "short_name": "ComplianceTracker",
+  "description": "Streamline healthcare compliance with automated task tracking, document management, and regulatory oversight for medical practices.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["healthcare", "productivity", "business"],
+  "screenshots": [
+    {
+      "src": "/api/og",
+      "sizes": "1200x630",
+      "type": "image/png"
+    }
+  ]
+}

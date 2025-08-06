@@ -6,6 +6,7 @@ import './models/Organization';
 import './models/Task';
 import './models/Document';
 import './models/Invitation';
+import './models/Blog';
 
 let isConnected = false;
 
@@ -34,7 +35,7 @@ export async function connectDB() {
  * This prevents "Schema hasn't been registered" errors in serverless environments
  */
 export function ensureModelsRegistered() {
-  const requiredModels = ['User', 'Organization', 'Task', 'Document', 'Invitation'];
+  const requiredModels = ['User', 'Organization', 'Task', 'Document', 'Invitation', 'Blog'];
   
   requiredModels.forEach(modelName => {
     if (!mongoose.models[modelName]) {
@@ -55,6 +56,9 @@ export function ensureModelsRegistered() {
             break;
           case 'Invitation':
             require('./models/Invitation');
+            break;
+          case 'Blog':
+            require('./models/Blog');
             break;
         }
       } catch (error) {

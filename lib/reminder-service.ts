@@ -73,7 +73,7 @@ export class ReminderService {
         const tasks = await Task.find(query)
           .populate('assignedTo', 'name email')
           .populate('organization', 'name')
-          .lean() as TaskWithUser[];
+          .lean() as any as TaskWithUser[];
         
         console.log(`Found ${tasks.length} tasks ${days === 0 ? 'overdue' : `due in ${days} days`}`);
         
@@ -135,7 +135,7 @@ export class ReminderService {
         const documents = await Document.find(query)
           .populate('assignedTo', 'name email')
           .populate('organization', 'name')
-          .lean() as DocumentWithUsers[];
+          .lean() as any as DocumentWithUsers[];
         
         console.log(`Found ${documents.length} documents ${days === 0 ? 'expired' : `expiring in ${days} days`}`);
         

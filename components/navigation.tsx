@@ -42,6 +42,9 @@ export function Navigation() {
             <Link href="/#pricing" className="hds-nav-item hds-text-link">
               Pricing
             </Link>
+            <Link href="/blog" className="hds-nav-item hds-text-link">
+              Blog
+            </Link>
             <Link href="/#faq" className="hds-nav-item hds-text-link">
               FAQ
             </Link>
@@ -141,6 +144,13 @@ export function Navigation() {
                 onClick={() => setIsOpen(false)}
               >
                 Pricing
+              </Link>
+              <Link 
+                href="/blog" 
+                className="block hds-nav-item hds-text-link py-2"
+                onClick={() => setIsOpen(false)}
+              >
+                Blog
               </Link>
               <Link 
                 href="/#faq" 

@@ -12,10 +12,26 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'ComplianceTracker - Healthcare Compliance Management',
+  title: {
+    default: 'ComplianceTracker - Healthcare Compliance Management',
+    template: '%s | ComplianceTracker'
+  },
   description: 'Streamline healthcare compliance with automated task tracking, document management, and regulatory oversight for medical practices.',
-  keywords: 'healthcare compliance, HIPAA compliance, medical practice management, compliance tracking, healthcare documentation, regulatory compliance',
+  keywords: 'healthcare compliance, HIPAA compliance, medical practice management, compliance tracking, healthcare documentation, regulatory compliance, medical software, healthcare automation',
   authors: [{ name: 'ComplianceTracker Team' }],
+  creator: 'ComplianceTracker',
+  publisher: 'ComplianceTracker',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: [
       {
@@ -26,6 +42,7 @@ export const metadata: Metadata = {
     shortcut: '/logo.svg',
     apple: '/logo.svg',
   },
+  manifest: '/manifest.json',
   openGraph: {
     title: 'ComplianceTracker - Healthcare Compliance Management',
     description: 'Streamline healthcare compliance with automated task tracking, document management, and regulatory oversight for medical practices.',
@@ -47,10 +64,12 @@ export const metadata: Metadata = {
     title: 'ComplianceTracker - Healthcare Compliance Management',
     description: 'Streamline healthcare compliance with automated task tracking, document management, and regulatory oversight for medical practices.',
     images: [process.env.NEXT_PUBLIC_OG_IMAGE_URL || '/api/og'],
+    creator: '@ComplianceTracker',
   },
-  robots: {
-    index: true,
-    follow: true,
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    yandex: process.env.YANDEX_VERIFICATION,
+    yahoo: process.env.YAHOO_SITE_VERIFICATION,
   },
 };
 
