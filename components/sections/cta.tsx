@@ -28,7 +28,7 @@ export function CTA() {
             
             <Button variant="outline" size="lg" className="text-base border-white text-white hover:bg-white hover:text-blue-600">
               <Link href="#pricing">
-                View Pricing ($49/month)
+                View Pricing (Starting at $49/mo)
               </Link>
             </Button>
           </div>

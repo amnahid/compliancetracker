@@ -17,10 +17,12 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { AuthGuard } from '@/components/auth/AuthGuard';
+import { PRICING_PLANS, formatPrice } from '@/lib/pricing';
 
 interface UserSubscription {
   status: 'trialing' | 'active' | 'past_due' | 'canceled' | 'unpaid';
   plan: string;
+  interval?: 'month' | 'year';
   currentPeriodStart?: string;
   currentPeriodEnd?: string;
   trialStart?: string;
@@ -125,15 +127,16 @@ function BillingPageContent() {
     }
   };
 
-  const handleStartSubscription = async () => {
+  const handleStartSubscription = async (planType: 'monthly' | 'yearly' = 'monthly') => {
     try {
       setLoading(true);
+      const planName = planType === 'yearly' ? 'healthcare_compliance_yearly' : 'healthcare_compliance';
       const response = await fetch('/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ plan: 'healthcare_compliance' }),
+        body: JSON.stringify({ plan: planName }),
       });
 
       if (response.ok) {
@@ -215,6 +218,14 @@ function BillingPageContent() {
     }
   };
 
+  const getSubscriptionPriceDisplay = (subscription: UserSubscription) => {
+    // Map subscription plan to pricing
+    const isYearly = subscription.interval === 'year';
+    const plan = isYearly ? PRICING_PLANS.yearly : PRICING_PLANS.monthly;
+    
+    return formatPrice(plan.price, plan.interval);
+  };
+
   const calculateTrialDaysLeft = () => {
     if (!userData?.trialEndsAt) return 0;
     const trialEnd = new Date(userData.trialEndsAt);
@@ -292,13 +303,26 @@ function BillingPageContent() {
                   </p>
                 </div>
               </div>
-              <Button 
-                onClick={handleStartSubscription} 
-                disabled={loading || isBillingDisabled}
-                title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
-              >
-                Upgrade Now
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => handleStartSubscription('monthly')} 
+                  disabled={loading || isBillingDisabled}
+                  title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
+                  variant="outline"
+                  size="sm"
+                >
+                  $49/month
+                </Button>
+                <Button 
+                  onClick={() => handleStartSubscription('yearly')} 
+                  disabled={loading || isBillingDisabled}
+                  title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
+                  size="sm"
+                >
+                  $499/year
+                  <span className="ml-1 text-xs bg-green-100 text-green-800 px-1.5 py-0.5 rounded">Save $89</span>
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -318,13 +342,26 @@ function BillingPageContent() {
                   </p>
                 </div>
               </div>
-              <Button 
-                onClick={handleStartSubscription} 
-                disabled={loading || isBillingDisabled}
-                title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
-              >
-                Subscribe Now
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => handleStartSubscription('monthly')} 
+                  disabled={loading || isBillingDisabled}
+                  title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
+                  variant="outline"
+                  size="sm"
+                >
+                  $49/month
+                </Button>
+                <Button 
+                  onClick={() => handleStartSubscription('yearly')} 
+                  disabled={loading || isBillingDisabled}
+                  title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
+                  size="sm"
+                >
+                  $499/year
+                  <span className="ml-1 text-xs bg-green-100 text-green-800 px-1.5 py-0.5 rounded">Save $89</span>
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -345,10 +382,11 @@ function BillingPageContent() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold">
-                {userData?.subscription?.plan === 'healthcare_compliance' ? 'Compliance Tracker' : 'No Active Plan'}
+                {userData?.subscription?.plan ? 'Compliance Tracker' : 'No Active Plan'}
               </h3>
               <p className="text-sm text-muted-foreground">
-                {userData?.subscription?.status === 'active' ? '$49/month' : 
+                {userData?.subscription?.status === 'active' ? 
+                  getSubscriptionPriceDisplay(userData.subscription) :
                  userIsOnTrial ? `Free trial (${trialDaysLeft} days left)` : 
                  'No subscription'}
               </p>
@@ -391,13 +429,26 @@ function BillingPageContent() {
                 Manage Subscription
               </Button>
             ) : (
-              <Button 
-                onClick={handleStartSubscription} 
-                disabled={loading || isBillingDisabled}
-                title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
-              >
-                {userIsOnTrial ? 'Upgrade to Paid Plan' : 'Start Subscription'}
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => handleStartSubscription('monthly')} 
+                  disabled={loading || isBillingDisabled}
+                  title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
+                  variant="outline"
+                  size="sm"
+                >
+                  $49/month
+                </Button>
+                <Button 
+                  onClick={() => handleStartSubscription('yearly')} 
+                  disabled={loading || isBillingDisabled}
+                  title={isBillingDisabled ? "Billing options will be unlocked on August 15, 2025" : ""}
+                  size="sm"
+                >
+                  $499/year
+                  <span className="ml-1 text-xs bg-green-100 text-green-800 px-1.5 py-0.5 rounded">Save $89</span>
+                </Button>
+              </div>
             )}
           </div>
         </CardContent>

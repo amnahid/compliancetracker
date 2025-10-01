@@ -16,9 +16,9 @@ export function Hero() {
           </div>
           
           <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
-            Stay Compliant at
+            Stay Compliant
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              {' '}$49/month
+              {' '}starting at $49/mo
             </span>
           </h1>
           
@@ -37,7 +37,7 @@ export function Hero() {
             
             <Button variant="outline" size="lg" className="text-base">
               <Link href="#pricing">
-                View Pricing - $49/month
+                View Pricing - Starting at $49/mo
               </Link>
             </Button>
           </div>

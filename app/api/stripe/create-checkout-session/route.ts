@@ -12,9 +12,18 @@ export async function POST(request: NextRequest) {
       return authResult.response;
     }
 
-    const { plan = process.env.DEFAULT_PLAN_NAME || 'healthcare_compliance' } = await request.json();
+    const { plan = 'monthly' } = await request.json();
 
-    if (!plan || !PRICE_IDS[plan as keyof typeof PRICE_IDS]) {
+    // Map plan names to the correct price IDs
+    const planToPriceId: Record<string, string> = {
+      monthly: PRICE_IDS.healthcare_compliance_monthly,
+      yearly: PRICE_IDS.healthcare_compliance_yearly,
+      // Legacy support
+      healthcare_compliance: PRICE_IDS.healthcare_compliance_monthly,
+    };
+
+    const priceId = planToPriceId[plan];
+    if (!priceId) {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
     }
 
@@ -101,7 +110,7 @@ export async function POST(request: NextRequest) {
       customer: customerId,
       line_items: [
         {
-          price: PRICE_IDS[plan as keyof typeof PRICE_IDS],
+          price: priceId,
           quantity: 1,
         },
       ],

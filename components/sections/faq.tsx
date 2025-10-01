@@ -27,12 +27,12 @@ const faqs = [
     answer: 'We provide email support with 48-hour response times (weekdays only). This is a small operation, not a huge company with instant chat support. We\'ll help with basic setup questions, but we can\'t provide compliance advice or extensive hand-holding. There are some setup guides and basic documentation.',
   },
   {
-    question: 'Is $49/month actually a good deal?',
+    question: 'Is this actually a good deal?',
     answer: 'It depends. Yes, it\'s cheaper than big compliance solutions that cost $200-500+/month. But those often include actual compliance expertise, training materials, and professional support. We\'re basically a digital organizer. If you just need task tracking and reminders, it might be worth it. If you need comprehensive compliance guidance, look elsewhere.',
   },
   {
     question: 'What happens if I cancel?',
-    answer: 'You can export your data to PDF and CSV files before canceling. We don\'t make it difficult to leave. Your data gets deleted after 30 days, and we don\'t charge cancellation fees or try to lock you in. If you decide it\'s not worth $49/month, just cancel.',
+    answer: 'You can export your data to PDF and CSV files before canceling. We don\'t make it difficult to leave. Your data gets deleted after 30 days, and we don\'t charge cancellation fees or try to lock you in. If you decide it\'s not worth the monthly cost, just cancel.',
   },
   {
     question: 'Do you integrate with other software?',

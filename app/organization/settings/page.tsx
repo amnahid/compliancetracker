@@ -12,6 +12,7 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Building2, Users, Shield, Mail, Crown, Copy, Check, CreditCard, ArrowUpCircle, ExternalLink } from 'lucide-react';
+import { formatPrice } from '@/lib/pricing';
 
 interface OrganizationData {
   id: string;
@@ -84,6 +85,17 @@ export default function OrganizationSettings() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const getOrganizationPriceDisplay = (subscription: any) => {
+    if (!subscription || subscription.status !== 'active') {
+      return 'Starting at $49/month';
+    }
+    // Map subscription interval to pricing
+    if (subscription.interval === 'year') {
+      return '$499/year';
+    }
+    return '$49/month';
   };
 
   const handleInputChange = (field: string, value: any) => {
@@ -401,7 +413,7 @@ export default function OrganizationSettings() {
                   {organization.subscription?.plan?.replace('_', ' ') || 'No Plan'}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {organization.subscription?.status === 'active' ? '$49/month' : 'Start from $49/month'}
+                  {getOrganizationPriceDisplay(organization.subscription)}
                 </p>
               </div>
               <div key="seats">

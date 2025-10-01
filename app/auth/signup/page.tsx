@@ -1,16 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Github, Chrome, Shield, Clock } from 'lucide-react';
+import { Github, Chrome, Shield, Clock, Star } from 'lucide-react';
+import { PRICING_PLANS, formatPrice } from '@/lib/pricing';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -18,7 +20,18 @@ export default function SignUp() {
   const [name, setName] = useState('');
   const [organization, setOrganization] = useState('');
   const [loading, setLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState('monthly');
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const planParam = searchParams.get('plan');
+    if (planParam === 'yearly' || planParam === 'monthly') {
+      setSelectedPlan(planParam);
+    }
+  }, [searchParams]);
+
+  const currentPlan = selectedPlan === 'yearly' ? PRICING_PLANS.yearly : PRICING_PLANS.monthly;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +43,7 @@ export default function SignUp() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, name, organization }),
+        body: JSON.stringify({ email, password, name, organization, plan: selectedPlan }),
       });
 
       if (res.ok) {
@@ -76,8 +89,44 @@ export default function SignUp() {
           </div>
           <CardTitle>Start Your Free Trial</CardTitle>
           <CardDescription>
-            14 days free, then $49/month. No credit card required.
+            {currentPlan.trial_days} days free, then {formatPrice(currentPlan.price, currentPlan.interval)}. No credit card required.
           </CardDescription>
+          
+          {/* Plan Selection */}
+          <div className="mt-4 space-y-3">
+            <div className="text-sm font-medium text-center">Choose your plan:</div>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => setSelectedPlan('monthly')}
+                className={`p-3 border rounded-lg text-sm transition-all ${
+                  selectedPlan === 'monthly'
+                    ? 'border-blue-500 bg-blue-50 text-blue-900'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="font-medium">Monthly</div>
+                <div className="text-blue-600 font-bold">${PRICING_PLANS.monthly.price}/mo</div>
+              </button>
+              <button
+                onClick={() => setSelectedPlan('yearly')}
+                className={`p-3 border rounded-lg text-sm transition-all relative ${
+                  selectedPlan === 'yearly'
+                    ? 'border-blue-500 bg-blue-50 text-blue-900'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                {selectedPlan === 'yearly' && (
+                  <Badge className="absolute -top-2 -right-2 bg-green-600 text-white text-xs px-2 py-1">
+                    <Star className="w-3 h-3 mr-1" />
+                    Save $89
+                  </Badge>
+                )}
+                <div className="font-medium">Yearly</div>
+                <div className="text-blue-600 font-bold">${PRICING_PLANS.yearly.price}/yr</div>
+                <div className="text-xs text-muted-foreground">${PRICING_PLANS.yearly.monthlyEquivalent?.toFixed(2)}/mo</div>
+              </button>
+            </div>
+          </div>
         </CardHeader>
         
         <CardContent>
@@ -140,8 +189,15 @@ export default function SignUp() {
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
               <div className="flex items-center justify-center gap-2 text-blue-800 text-sm">
                 <Clock className="h-4 w-4" />
-                <span className="font-medium">14-day free trial • No payment required</span>
+                <span className="font-medium">
+                  {currentPlan.trial_days}-day free trial • No payment required
+                </span>
               </div>
+              {selectedPlan === 'yearly' && (
+                <div className="text-center text-xs text-green-700 mt-1">
+                  Save ${PRICING_PLANS.yearly.savings} with yearly billing
+                </div>
+              )}
             </div>
           </div>
           
