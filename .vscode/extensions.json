@@ -1,11 +1,11 @@
 {
   "recommendations": [
-    "ms-vscode.vscode-typescript-next"
+    "ms-vscode.vscode-typescript-next",
+    "bradlc.vscode-tailwindcss"
   ],
   "unwantedRecommendations": [
     "ms-vscode.vscode-eslint",
     "esbenp.prettier-vscode",
-    "bradlc.vscode-tailwindcss",
     "ms-vscode.vscode-json",
     "formulahendry.auto-rename-tag",
     "ms-vscode.vscode-npm-script",

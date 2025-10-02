@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 import { Github, Chrome, Shield, Clock, Star } from 'lucide-react';
 import { PRICING_PLANS, formatPrice } from '@/lib/pricing';
 
-export default function SignUp() {
+function SignUpForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -254,5 +254,32 @@ export default function SignUp() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function SignUp() {
+  return (
+    <Suspense fallback={
+      <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+        <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-700" />
+          <div className="relative z-20 flex items-center text-lg font-medium">
+            <Shield className="mr-2 h-6 w-6" />
+            ComplianceTracker
+          </div>
+        </div>
+        <div className="lg:p-8">
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <div className="flex flex-col space-y-2 text-center">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Loading...
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    }>
+      <SignUpForm />
+    </Suspense>
   );
 }

@@ -173,5 +173,27 @@
   "editor.formatOnSave": false,
   "editor.formatOnPaste": false,
   "editor.formatOnType": false,
-  "editor.guides.indentation": false
+  "editor.guides.indentation": false,
+  
+  // CSS/Tailwind settings
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+  "css.customData": [".vscode/tailwind.json"],
+  
+  // Tailwind CSS IntelliSense settings
+  "tailwindCSS.includeLanguages": {
+    "html": "html",
+    "javascript": "javascript",
+    "typescript": "typescript",
+    "javascriptreact": "javascriptreact",
+    "typescriptreact": "typescriptreact"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ]
 }
